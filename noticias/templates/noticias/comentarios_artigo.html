@@ -1,0 +1,24 @@
+<h1>Comentários do artigo: {{ artigo.titulo }}</h1>
+
+<h2>Comentários existentes</h2>
+
+{% for comentario in comentarios %}
+    <p>{{ comentario.texto }}</p>
+    <hr>
+{% empty %}
+    <p>Ainda não existem comentários.</p>
+{% endfor %}
+
+<h2>Novo comentário</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submeter comentário</button>
+</form>
+
+<br>
+
+<a href="{% url 'detalhe_artigo' artigo.id %}">
+    Voltar ao artigo
+</a>
