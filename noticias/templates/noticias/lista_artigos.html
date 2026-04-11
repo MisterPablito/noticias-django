@@ -1,0 +1,9 @@
+<h1>Artigos</h1>
+
+{% for artigo in artigos %}
+    <h2>
+        <a href="{% url 'detalhe_artigo' artigo.id %}">
+            {{ artigo.titulo }}
+        </a>
+    </h2>
+{% endfor %}
