@@ -1,0 +1,55 @@
+{% extends 'noticias/base.html' %}
+
+{% block extra_css %}
+<style>
+    /* Remove a caixa preta principal apenas nesta página */
+    .main-container {
+        background-color: transparent !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+        padding: 0 !important;
+    }
+    /* Ajusta o card para ficar legível sobre o fundo animado */
+    .card {
+        background-color: rgba(0, 0, 0, 0.75) !important;
+        backdrop-filter: blur(4px);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-5">
+        <div class="card bg-black bg-opacity-75 text-light border-danger">
+            <div class="card-body">
+                <h2 class="card-title text-center mb-4" style="font-family: 'Cinzel', serif; color: #d47272;">🔐 Acesso ao Coven</h2>
+
+                {% if erro %}
+                <div class="alert alert-danger bg-dark text-danger border-danger">
+                    <strong>Credenciais inválidas.</strong> Não foi possível encontrar este utilizador.
+                </div>
+                {% endif %}
+
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Nome de utilizador</label>
+                        <input type="text" class="form-control bg-dark text-light border-danger" id="username" name="username" placeholder="Ex: MorteSombria">
+                    </div>
+                    <div class="mb-4">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control bg-dark text-light border-danger" id="password" name="password" placeholder="••••••••">
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-gotico">Entrar nas Sombras</button>
+                        <a href="{% url 'lista_artigos' %}" class="btn btn-outline-light">← Voltar ao site</a>
+                    </div>
+                </form>
+                <p class="text-center mt-3 small text-muted">
+                    🦇 Neste momento, o nosso coven está completo e não conseguimos aceitar mais almas. Explora o site e volta mais tarde... pode ser que surja uma vaga.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

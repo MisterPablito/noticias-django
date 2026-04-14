@@ -1,9 +1,85 @@
-<h1>Artigos</h1>
+{% extends 'noticias/base.html' %}
+{% load noticias_extras %}
 
-{% for artigo in artigos %}
-    <h2>
-        <a href="{% url 'detalhe_artigo' artigo.id %}">
-            {{ artigo.titulo }}
-        </a>
-    </h2>
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="mb-0" style="font-family: 'Cinzel', serif; color: #ffffff;">📰 Últimas Notícias</h1>
+    {% if categoria_selecionada %}
+        <span class="badge bg-danger">Filtro: {{ categoria_selecionada }}</span>
+    {% endif %}
+</div>
+
+<p class="lead" style="color: #ffffff;">As últimas sobre as rainhas das trevas: Rhea Ripley, Pinkchyuwu, 6nattynat e outras ícones da estética dark.</p>
+
+{% if termo_pesquisa %}
+    <div class="alert alert-secondary bg-dark text-light border-secondary">
+        Resultados para: <strong>"{{ termo_pesquisa }}"</strong>
+        <a href="{% url 'lista_artigos' %}" class="float-end text-danger">Limpar</a>
+    </div>
+{% endif %}
+
+{% for artigo in page_obj %}
+    <div class="card mb-4 bg-black bg-opacity-75 text-light border-danger">
+        <div class="row g-0">
+            {% if artigo.titulo == "Rhea Ripley a Deusa Gótica da WWE" %}
+                <div class="col-md-4">
+                    <img src="/static/noticias/img/Rhea Replay.jpeg" class="img-fluid rounded-start" alt="Rhea Ripley" style="height: 100%; object-fit: cover;">
+                </div>
+            {% elif artigo.imagem %}
+                <div class="col-md-4">
+                    <img src="{{ artigo.imagem.url }}" class="img-fluid rounded-start" alt="{{ artigo.titulo }}" style="height: 100%; object-fit: cover;">
+                </div>
+            {% endif %}
+            <div class="{% if artigo.imagem or artigo.titulo == 'Rhea Ripley a Deusa Gótica da WWE' %}col-md-8{% else %}col-12{% endif %}">
+                <div class="card-body">
+                    <h2 class="card-title">
+                        <a href="{% url 'detalhe_artigo' artigo.id %}" class="text-danger text-decoration-none" style="font-family: 'Cinzel', serif;">
+                            {{ artigo.titulo }}
+                        </a>
+                    </h2>
+                    <p class="card-text">
+                        <span class="badge bg-secondary">{{ artigo.get_categoria_display }}</span>
+                        <small class="text-muted ms-3">{{ artigo.data_publicacao|data_relativa }}</small>
+                        <small class="text-muted ms-3">👁️ {{ artigo.visualizacoes }}</small>
+                        <small class="text-muted ms-3">💬 {{ artigo.comentarios.count }}</small>
+                    </p>
+                    <p class="card-text">{{ artigo.corpo|truncatewords:30 }}</p>
+                    <a href="{% url 'detalhe_artigo' artigo.id %}" class="btn btn-sm btn-outline-light mt-2">Ler mais →</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% empty %}
+    <div class="alert alert-warning bg-dark text-warning border-warning">
+        Nenhuma notícia encontrada. Tenta outro termo ou volta mais tarde.
+    </div>
 {% endfor %}
+
+{% if page_obj.paginator.num_pages > 1 %}
+<nav aria-label="Paginação">
+    <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link bg-dark text-danger border-danger" href="?page=1{% if termo_pesquisa %}&q={{ termo_pesquisa }}{% endif %}{% if categoria_selecionada %}&categoria={{ categoria_selecionada }}{% endif %}">«</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link bg-dark text-danger border-danger" href="?page={{ page_obj.previous_page_number }}{% if termo_pesquisa %}&q={{ termo_pesquisa }}{% endif %}{% if categoria_selecionada %}&categoria={{ categoria_selecionada }}{% endif %}">‹</a>
+            </li>
+        {% endif %}
+
+        <li class="page-item active">
+            <span class="page-link bg-danger border-danger">{{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+        </li>
+
+        {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link bg-dark text-danger border-danger" href="?page={{ page_obj.next_page_number }}{% if termo_pesquisa %}&q={{ termo_pesquisa }}{% endif %}{% if categoria_selecionada %}&categoria={{ categoria_selecionada }}{% endif %}">›</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link bg-dark text-danger border-danger" href="?page={{ page_obj.paginator.num_pages }}{% if termo_pesquisa %}&q={{ termo_pesquisa }}{% endif %}{% if categoria_selecionada %}&categoria={{ categoria_selecionada }}{% endif %}">»</a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+{% endblock %}

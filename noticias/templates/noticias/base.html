@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Notícias sobre as mulheres mais sombrias e estilosas da internet. Rhea Ripley, Pinkchyuwu, 6nattynat e muito mais.">
+    <!-- Open Graph / Social Media -->
+    <meta property="og:title" content="🦇 Notícias sobre Góticas">
+    <meta property="og:description" content="As últimas sobre as rainhas das trevas: Rhea Ripley, Pinkchyuwu, 6nattynat e outras ícones da estética dark.">
+    <meta property="og:image" content="/static/noticias/img/og-image.png">
+    <meta property="og:url" content="https://noticiassobregoticas.pt">
+    <meta name="twitter:card" content="summary_large_image">
+    <!-- Favicon (emoji morcego via SVG) -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦇</text></svg>">
+    <title>🦇 Notícias sobre Góticas ⚡🖤</title>
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts: Cinzel -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&display=swap" rel="stylesheet">
+    <!-- CSS Personalizado -->
+    <link rel="stylesheet" href="/static/noticias/css/estilo.css">
+    <style>
+        body {
+            background-color: #1a1212;
+            color: #f5e6e6;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .navbar-dark .navbar-brand {
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            color: #d47272 !important;
+        }
+        a {
+            color: #d47272;
+            text-decoration: none;
+        }
+        a:hover {
+            color: #f0a3a3;
+        }
+        .btn-gotico {
+            background-color: #8b4040;
+            color: white;
+            border: none;
+        }
+        .btn-gotico:hover {
+            background-color: #b85c5c;
+            box-shadow: 0 0 10px #b85c5c;
+        }
+        footer {
+            margin-top: auto;
+            background-color: #0c0808;
+            color: #bba6a6;
+        }
+        .main-container {
+            background-color: #000000 !important;
+            backdrop-filter: none !important;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.8);
+        }
+        /* Placeholder com cor clara e opacidade para visibilidade */
+        ::placeholder {
+            color: #aaaaaa !important;
+            opacity: 1;
+        }
+        /* Garantir que textos no geral são legíveis */
+        .navbar-nav .nav-link {
+            color: #f5e6e6 !important;
+        }
+        .navbar-nav .nav-link:hover {
+            color: #d47272 !important;
+        }
+        .dropdown-menu-dark .dropdown-item {
+            color: #f5e6e6;
+        }
+        .dropdown-menu-dark .dropdown-item:hover {
+            background-color: #8b4040;
+        }
+        /* Ajustes específicos para o input de pesquisa */
+        #search-input {
+            color: #ffffff !important;
+            background-color: #1a1a1a !important;
+        }
+        #search-input::placeholder {
+            color: #aaaaaa !important;
+        }
+        /* Botão de pesquisa */
+        .btn-outline-danger {
+            color: #d47272;
+            border-color: #8b4040;
+        }
+        .btn-outline-danger:hover {
+            background-color: #8b4040;
+            color: white;
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <canvas id="particulas-canvas" style="position:fixed; top:0; left:0; width:100%; height:100%; z-index:-1;"></canvas>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-black border-bottom border-danger">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'lista_artigos' %}">🦇 Notícias sobre Góticas ⚡🖤</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'lista_artigos' %}">Início</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="goticasDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            🦇 Góticas
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="goticasDropdown" id="goticas-menu">
+                            <li><span class="dropdown-item-text">A carregar...</span></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'goticas' %}">Todas as Góticas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'sobre' %}">Sobre</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">🔐 Login</a>
+                    </li>
+                </ul>
+                <!-- Formulário de pesquisa (sem placeholder visível e botão "Pesquisar") -->
+                <form class="d-flex position-relative" method="GET" action="{% url 'lista_artigos' %}">
+                    <input class="form-control me-2 bg-dark text-light border-danger" type="search" name="q" placeholder="" id="search-input" autocomplete="off">
+                    <div id="search-suggestions" class="dropdown-menu dropdown-menu-dark" style="display:none; position:absolute; top:100%; left:0; z-index:1000;"></div>
+                    <button class="btn btn-outline-danger" type="submit">🔍 Pesquisar</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container my-4 main-container">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="py-3 border-top border-danger">
+        <div class="container text-center">
+            <p class="mb-1">© 2026 Notícias sobre Góticas – Por fãs, para fãs do lado mais negro da beleza. 🥀</p>
+            <p class="mb-0 small">White Monster é a bebida oficial das góticas desde 2023 🦇⚡🖤 | <span id="frase-rodape">{{ frase_aleatoria }}</span></p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/noticias/js/script.js"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

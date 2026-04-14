@@ -1,24 +1,46 @@
-<h1>Comentários do artigo: {{ artigo.titulo }}</h1>
+{% extends 'noticias/base.html' %}
 
-<h2>Comentários existentes</h2>
+{% block content %}
+<h1 style="font-family: 'Cinzel', serif; color: #b30000;">Comentários: {{ artigo.titulo }}</h1>
+<hr class="border-danger">
 
+<h3 class="text-light">Comentários existentes</h3>
 {% for comentario in comentarios %}
-    <p>{{ comentario.texto }}</p>
-    <hr>
+    <div class="card bg-dark bg-opacity-75 text-light mb-3 border-secondary">
+        <div class="card-body">
+            <p class="card-text">{{ comentario.texto }}</p>
+            <footer class="blockquote-footer text-light-emphasis">{{ comentario.data_comentario|date:"d/m/Y H:i" }}</footer>
+        </div>
+    </div>
 {% empty %}
-    <p>Ainda não existem comentários.</p>
+    <div class="alert alert-secondary bg-dark text-light">
+        Nenhum comentário ainda. Sê a primeira alma a quebrar o silêncio... tal como a Jenna Ortega faria.
+    </div>
 {% endfor %}
 
-<h2>Novo comentário</h2>
+<hr class="border-danger">
 
+<h3 class="text-light">Novo comentário</h3>
 <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Submeter comentário</button>
+    <div class="mb-3">
+        {{ form.texto }}
+    </div>
+    <button type="submit" class="btn btn-gotico" id="comentar-btn">Submeter Comentário</button>
 </form>
-
 <br>
+<a href="{% url 'detalhe_artigo' artigo.id %}" class="btn btn-outline-light">← Voltar ao artigo</a>
+{% endblock %}
 
-<a href="{% url 'detalhe_artigo' artigo.id %}">
-    Voltar ao artigo
-</a>
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const textarea = document.querySelector('textarea');
+        if (textarea) {
+            textarea.classList.add('form-control', 'bg-dark', 'text-light', 'border-danger');
+            textarea.setAttribute('rows', 4);
+            textarea.setAttribute('placeholder', 'Partilha a tua opinião... Será que a Rhea Ripley aprovaria este look? 🖤⚡');
+        }
+    });
+</script>
+{% endblock %}

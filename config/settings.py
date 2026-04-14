@@ -116,3 +116,22 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+# Configuração de ficheiros estáticos (para desenvolvimento)
+STATICFILES_DIRS = [
+    BASE_DIR / "noticias" / "static",
+]
+
+# Configuração de mensagens (para usar classes Bootstrap nos alerts)
+from django.contrib.messages import constants as messages
+MESSAGE_TAGS = {
+    messages.DEBUG: 'secondary',
+    messages.INFO: 'info',
+    messages.SUCCESS: 'success',
+    messages.WARNING: 'warning',
+    messages.ERROR: 'danger',
+}
+
+# Media files (uploads de imagens)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'

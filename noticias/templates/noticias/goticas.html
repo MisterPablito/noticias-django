@@ -1,0 +1,20 @@
+{% extends 'noticias/base.html' %}
+
+{% block content %}
+<h1 style="font-family: 'Cinzel', serif; color: #ffffff;">🦇 Todas as Góticas</h1>
+<p class="lead" style="color: #ffffff;">Explora as notícias por cada uma das nossas musas sombrias.</p>
+<div class="row">
+    {% for valor, label in categorias %}
+        <div class="col-md-6 mb-3">
+            <div class="card bg-black bg-opacity-75 text-light border-danger h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ label }}</h5>
+                    <a href="{% url 'lista_artigos' %}?categoria={{ valor }}" class="btn btn-gotico btn-sm">Ver notícias</a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+<hr class="border-danger">
+<p class="text-center fst-italic mt-3" style="color: #d47272;">{{ mensagem_extra }}</p>
+{% endblock %}

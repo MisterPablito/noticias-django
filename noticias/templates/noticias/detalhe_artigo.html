@@ -1,13 +1,36 @@
-<h1>{{ artigo.titulo }}</h1>
+{% extends 'noticias/base.html' %}
+{% load noticias_extras %}
 
-<p>{{ artigo.corpo }}</p>
+{% block content %}
+<article>
+    <h1 style="font-family: 'Cinzel', serif; color: #ffffff;" class="mb-3">{{ artigo.titulo }}</h1>
+    <p class="text-muted mb-4">
+        <span class="badge bg-secondary">{{ artigo.get_categoria_display }}</span> |
+        Publicado {{ artigo.data_publicacao|data_relativa }} |
+        👁️ {{ artigo.visualizacoes }} visualizações
+    </p>
 
-<a href="{% url 'comentarios_artigo' artigo.id %}">
-    Ver comentários
-</a>
+    {% if artigo.titulo == "Rhea Ripley a Deusa Gótica da WWE" %}
+        <div class="text-center mb-4">
+            <img src="/static/noticias/img/Rhea Replay.jpeg" class="img-fluid rounded" alt="Rhea Ripley" style="max-height: 400px;">
+        </div>
+    {% elif artigo.imagem %}
+        <div class="text-center mb-4">
+            <img src="{{ artigo.imagem.url }}" class="img-fluid rounded" alt="{{ artigo.titulo }}" style="max-height: 400px;">
+        </div>
+    {% endif %}
 
-<br><br>
+    <hr class="border-danger">
 
-<a href="{% url 'lista_artigos' %}">
-    Voltar
-</a>
+    <div class="fs-5 lh-lg" style="max-width: 800px; margin: 0 auto; text-align: justify; word-wrap: break-word;">
+        {{ artigo.corpo|linebreaks }}
+    </div>
+
+    <hr class="border-danger mt-4">
+
+    <div class="d-flex justify-content-between">
+        <a href="{% url 'lista_artigos' %}" class="btn btn-outline-light">← Voltar</a>
+        <a href="{% url 'comentarios_artigo' artigo.id %}" class="btn btn-gotico">💬 Deixar um comentário ou ver opiniões ({{ artigo.comentarios.count }})</a>
+    </div>
+</article>
+{% endblock %}
